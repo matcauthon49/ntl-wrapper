@@ -1,5 +1,28 @@
 #include "wrapper.h"
 
+// ZZ constructors
+ZZ *ZZ_zero() {
+    ZZ *z = new ZZ();
+    return z;
+};
+
+ZZ *ZZ_set_long(long a) {
+    ZZ *z = new ZZ();
+    *z = a;
+    return z;
+};
+
+const ZZ *ZZ_set_string(const char *a){
+    const ZZ &x = conv<ZZ>(a);
+    const ZZ *z = &x;
+    return z; 
+};
+
+// initiate field modulus
+void init_modulus(ZZ *p){
+    ZZ_p::init(*p);
+};
+
 // constructors
 ZZ_pX *ZZ_pX_zero() {
     ZZ_pX *z = new ZZ_pX();
@@ -127,5 +150,4 @@ void ZZ_pX_randomp(ZZ_pX *x, long n) {
 void ZZ_pX_evalp(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a){
     eval(*b, *f, *a);
 };
-
 

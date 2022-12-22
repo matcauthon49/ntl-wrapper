@@ -4,14 +4,23 @@
 #ifdef __cplusplus
     #include <NTL/ZZ_pX.h>
     #include <NTL/ZZ_p.h>
+    #include <NTL/ZZ.h>
 
     using namespace NTL;
 extern "C" {
 #else
     typedef struct ZZ_pX ZZ_pX;
     typedef struct ZZ_p ZZ_p;
+    typedef struct ZZ ZZ;
 #endif
 
+// constructor for ZZ
+ZZ *ZZ_zero();
+ZZ *ZZ_set_long(long a);
+const ZZ *ZZ_set_string(const char *a);
+
+// init field modulus
+void init_modulus(ZZ *p);
 
 // constructor and destructor
 ZZ_pX *ZZ_pX_zero(); // initializes zero polynomial
@@ -68,7 +77,6 @@ void ZZ_pX_randomp(ZZ_pX *x, long n);
 
 // eval
 void ZZ_pX_evalp(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a);
-ZZ_p ZZ_pX_eval(const ZZ_pX *f, const ZZ_p *a);
 
 #ifdef __cplusplus
 }
