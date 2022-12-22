@@ -12,14 +12,15 @@ ZZ *ZZ_set_long(long a) {
     return z;
 };
 
-const ZZ *ZZ_set_string(const char *a){
-    const ZZ &x = conv<ZZ>(a);
-    const ZZ *z = &x;
-    return z; 
+ ZZ *ZZ_set_string(const char *a){
+    ZZ *x = new ZZ();
+    ZZ z(INIT_VAL, a);
+    *x = z;
+    return x;
 };
 
 // initiate field modulus
-void init_modulus(ZZ *p){
+void init_modulus(const ZZ *p){
     ZZ_p::init(*p);
 };
 
@@ -118,19 +119,19 @@ void ZZ_pX_divRem(ZZ_pX *q, ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b){
     DivRem(*q, *r, *a, *b);
 };
 
-void ZZ_pX_divp(ZZ_pX *q, const ZZ_pX *a, const ZZ_pX *b){
+void ZZ_pX_div(ZZ_pX *q, const ZZ_pX *a, const ZZ_pX *b){
     div(*q, *a, *b);
 };
 
-void ZZ_pX_div_fpp(ZZ_pX *q, const ZZ_pX *a, const ZZ_p *b){
+void ZZ_pX_div_fp(ZZ_pX *q, const ZZ_pX *a, const ZZ_p *b){
     div(*q, *a, *b);
 };
 
-void ZZ_pX_div_longp(ZZ_pX *q, const ZZ_pX *a, long b){
+void ZZ_pX_div_long(ZZ_pX *q, const ZZ_pX *a, long b){
     div(*q, *a, b);
 };
 
-void ZZ_pX_remp(ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b){
+void ZZ_pX_rem(ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b){
     rem(*r, *a, *b);
 };
 
@@ -139,15 +140,27 @@ void ZZ_pX_print(ZZ_pX *x){
 };
 
 // reverse
-void ZZ_pX_reversep(ZZ_pX *x, const ZZ_pX *a, long hi){
+void ZZ_pX_reverse(ZZ_pX *x, const ZZ_pX *a, long hi){
     reverse(*x, *a, hi);
 };
 
-void ZZ_pX_randomp(ZZ_pX *x, long n) {
+void ZZ_pX_random(ZZ_pX *x, long n) {
     random(*x, n);
 };
 
-void ZZ_pX_evalp(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a){
+void ZZ_pX_eval(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a){
     eval(*b, *f, *a);
 };
 
+// modular arithmetic
+void ZZ_pX_mulmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *b, const ZZ_pX *f){
+    MulMod(*x, *a, *b, *f);
+};
+
+void ZZ_pX_sqrmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f){
+    SqrMod(*x, *a, *f);
+};
+
+void ZZ_pX_invmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f){
+    InvMod(*x, *a, *f);
+};

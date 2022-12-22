@@ -17,10 +17,10 @@ extern "C" {
 // constructor for ZZ
 ZZ *ZZ_zero();
 ZZ *ZZ_set_long(long a);
-const ZZ *ZZ_set_string(const char *a);
+ZZ *ZZ_set_string(const char *a);
 
 // init field modulus
-void init_modulus(ZZ *p);
+void init_modulus(const ZZ *p);
 
 // constructor and destructor
 ZZ_pX *ZZ_pX_zero(); // initializes zero polynomial
@@ -61,22 +61,29 @@ void ZZ_pX_power(ZZ_pX *x, const ZZ_pX *a, long e);
 
 // division (procedural)
 void ZZ_pX_divRem(ZZ_pX *q, ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b);
-void ZZ_pX_divp(ZZ_pX *q, const ZZ_pX *a, const ZZ_pX *b);
-void ZZ_pX_div_fpp(ZZ_pX *q, const ZZ_pX *a, const ZZ_p *b);
-void ZZ_pX_div_longp(ZZ_pX *q, const ZZ_pX *a, long b);
-void ZZ_pX_remp(ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b);
+void ZZ_pX_div(ZZ_pX *q, const ZZ_pX *a, const ZZ_pX *b);
+void ZZ_pX_div_fp(ZZ_pX *q, const ZZ_pX *a, const ZZ_p *b);
+void ZZ_pX_div_long(ZZ_pX *q, const ZZ_pX *a, long b);
+void ZZ_pX_rem(ZZ_pX *r, const ZZ_pX *a, const ZZ_pX *b);
 
 // I/O
 void ZZ_pX_print(ZZ_pX *x);
 
 // reverse
-void ZZ_pX_reversep(ZZ_pX *x, const ZZ_pX *a, long hi);
+void ZZ_pX_reverse(ZZ_pX *x, const ZZ_pX *a, long hi);
 
 // random
-void ZZ_pX_randomp(ZZ_pX *x, long n);
+void ZZ_pX_random(ZZ_pX *x, long n);
 
 // eval
-void ZZ_pX_evalp(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a);
+void ZZ_pX_eval(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a);
+
+// modular arithmetic
+void ZZ_pX_mulmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *b, const ZZ_pX *f);
+void ZZ_pX_sqrmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f);
+void ZZ_pX_invmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f);
+
+
 
 #ifdef __cplusplus
 }
