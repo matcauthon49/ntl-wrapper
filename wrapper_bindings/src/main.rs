@@ -75,7 +75,12 @@ fn main() {
         let p = ZZ_set_string(s1.as_ptr() as *const i8);
         let q = ZZ_set_string(s2.as_ptr() as *const i8);
 
-        // FFT Unfriendly Arithmetic
+        let s3 = CString::new("10".to_string()).unwrap();
+        let r = ZZ_set_string(s3.as_ptr() as *const i8);
+
+
+
+    // FFT Unfriendly Arithmetic
    check_mul(10000,p);
    check_mul(100000,p);
    check_mul(1000000,p);
@@ -86,7 +91,7 @@ fn main() {
 
    check_inv(10000,p);
    check_inv(100000,p);
-//    check_inv(1000000,p);
+    //    check_inv(1000000,p);
 
    // FFT Friendly Arithmetic
    check_mul(10000,q);
@@ -99,6 +104,6 @@ fn main() {
 
    check_inv(10000,q);
    check_inv(100000,q);
-//    check_inv(1000000,q);
+    //    check_inv(1000000,q);
     }
 }
