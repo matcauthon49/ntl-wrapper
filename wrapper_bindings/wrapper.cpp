@@ -19,6 +19,26 @@ ZZ *ZZ_set_long(long a) {
     return x;
 };
 
+// ZZ_p constructors
+ZZ_p *ZZ_p_zero() {
+    ZZ_p *z = new ZZ_p();
+    return z;
+};
+
+ZZ_p *ZZ_p_set_long(long a) {
+    ZZ_p *z = new ZZ_p();
+    *z = a;
+    return z;
+};
+
+ ZZ_p *ZZ_p_set_string(const char *a){
+    ZZ_p *x = new ZZ_p();
+    ZZ z(INIT_VAL, a);
+    ZZ_p w = to_ZZ_p(z);
+    *x = w;
+    return x;
+};
+
 // initiate field modulus
 void init_modulus(const ZZ *p){
     ZZ_p::init(*p);

@@ -20,6 +20,11 @@ ZZ *ZZ_zero();
 ZZ *ZZ_set_long(long a);
 ZZ *ZZ_set_string(const char *a);
 
+// constructor for ZZ_p
+ZZ_p *ZZ_p_zero();
+ZZ_p *ZZ_p_set_long(long a);
+ZZ_p *ZZ_p_set_string(const char *a);
+
 // init field modulus
 void init_modulus(const ZZ *p);
 
