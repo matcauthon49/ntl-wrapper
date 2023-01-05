@@ -31,13 +31,14 @@ ZZ_p *ZZ_p_set_long(long a) {
     return z;
 };
 
- ZZ_p *ZZ_p_set_string(const char *a){
-    ZZ_p *x = new ZZ_p();
-    ZZ z(INIT_VAL, a);
-    ZZ_p w = to_ZZ_p(z);
-    *x = w;
-    return x;
+void ZZ_p_set_string(const char *a, ZZ_p *x){
+    *x = to_ZZ_p(conv<ZZ>(a));
 };
+
+void ZZ_p_print(ZZ_p *x) {
+    std::cout << *x << "\n";
+};
+
 
 // initiate field modulus
 void init_modulus(const ZZ *p){

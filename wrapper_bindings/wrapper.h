@@ -23,7 +23,9 @@ ZZ *ZZ_set_string(const char *a);
 // constructor for ZZ_p
 ZZ_p *ZZ_p_zero();
 ZZ_p *ZZ_p_set_long(long a);
-ZZ_p *ZZ_p_set_string(const char *a);
+void ZZ_p_set_string(const char *a, ZZ_p *x);
+
+void ZZ_p_print(ZZ_p *x);
 
 // init field modulus
 void init_modulus(const ZZ *p);
