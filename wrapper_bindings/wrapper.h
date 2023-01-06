@@ -25,6 +25,7 @@ ZZ_p *ZZ_p_zero();
 ZZ_p *ZZ_p_set_long(long a);
 void ZZ_p_set_string(const char *a, ZZ_p *x);
 
+// ZZ_p helper functions
 void ZZ_p_print(ZZ_p *x);
 
 // init field modulus
