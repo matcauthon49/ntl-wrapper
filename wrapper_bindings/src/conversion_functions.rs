@@ -5,12 +5,17 @@ use std::ffi::CString;
 
 use num::{BigInt, Num};
 use ark_poly::{self, univariate::DensePolynomial};
+use ark_bls12_381::Fq as F;
+
 
 use wrapper_bindings::ZZ_p;
 use wrapper_bindings::ZZ_pX;
+use wrapper_bindings::ZZ_p_to_string;
 use wrapper_bindings::ZZ_p_zero;
 use wrapper_bindings::init_modulus;
 use wrapper_bindings::ZZ_set_string;
+use wrapper_bindings::ZZ_p_random;
+use wrapper_bindings::ZZ_p_print;
 use wrapper_bindings::ZZ_p_set_string;
 use wrapper_bindings::ZZ_pX_SetCoeff_fp;
 
@@ -69,7 +74,32 @@ pub fn ark_to_NTL_ZZ_pX<F: ark_ff::PrimeField>(p: DensePolynomial<F>, x: *mut ZZ
 }
 
 
-// Converts an NTL zz_P to an arkworks field element.
-pub fn NTL_to_ZZ_pX<F: ark_ff::PrimeField>(x: *mut ZZ_p, p: DensePolynomial<F>) {
+// Converts an NTL ZZ_p to an arkworks field element.
+pub fn NTL_ZZ_p_to_ark<F: ark_ff::PrimeField>(x: *mut ZZ_p) -> F {
+    unsafe{
+        let x_cstr: *const u8 = ZZ_p_to_string(x);
+        let x_slice = std::slice::from_raw_parts(x_cstr, 1024);
+        let p = F::from_le_bytes_mod_order(x_slice);        
+        return p;
+    }
+}
+
+pub fn main() {
+   
+    unsafe{
+        let s1 = CString::new("4002409555221667393417789825735904156556882819939007885332058136124031650490837864442687629129015664037894272559787".to_string()).unwrap();
+        let p = ZZ_set_string(s1.as_ptr() as *const i8);
+
+        init_modulus(p);
+        let x = ZZ_p_zero();
+        ZZ_p_random(x);
+        ZZ_p_print(x);
+
+        let a: F = NTL_ZZ_p_to_ark(x);
+        println!("{:?}", a);
+
+        ark_to_NTL_ZZ_p(a, x, true);
+        ZZ_p_print(x);
+    }
 
 }

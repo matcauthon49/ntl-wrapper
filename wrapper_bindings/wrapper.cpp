@@ -39,6 +39,16 @@ void ZZ_p_print(ZZ_p *x) {
     std::cout << *x << "\n";
 };
 
+void ZZ_p_random(ZZ_p *x) {
+    random(*x);
+};
+
+unsigned char *ZZ_p_to_string(const ZZ_p *z) {
+    ZZ zz = conv<ZZ>(*z);
+    unsigned char* x = new unsigned char[NumBytes(zz)];
+    BytesFromZZ(x, zz, NumBytes(zz));
+    return x;
+}
 
 // initiate field modulus
 void init_modulus(const ZZ *p){

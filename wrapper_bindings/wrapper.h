@@ -6,6 +6,8 @@
     #include <NTL/ZZ_p.h>
     #include <NTL/ZZ.h>
     #include <iostream>
+    #include <string>
+    #include <sstream>
 
     using namespace NTL;
 extern "C" {
@@ -27,6 +29,8 @@ void ZZ_p_set_string(const char *a, ZZ_p *x);
 
 // ZZ_p helper functions
 void ZZ_p_print(ZZ_p *x);
+void ZZ_p_random(ZZ_p *x);
+unsigned char *ZZ_p_to_string(const ZZ_p *z);
 
 // init field modulus
 void init_modulus(const ZZ *p);
