@@ -4,18 +4,16 @@
 use std::ffi::CString;
 
 use num::{BigInt, Num};
-use ark_poly::{self, univariate::DensePolynomial};
-use ark_bls12_381::Fq as F;
-use ark_std::{UniformRand};
+use ark_poly::{self, univariate::DensePolynomial, UVPolynomial};
 
 use wrapper_bindings::ZZ_p;
 use wrapper_bindings::ZZ_pX;
+use wrapper_bindings::ZZ_pX_coeff;
+use wrapper_bindings::ZZ_pX_deg;
 use wrapper_bindings::ZZ_p_to_string;
 use wrapper_bindings::ZZ_p_zero;
 use wrapper_bindings::init_modulus;
 use wrapper_bindings::ZZ_set_string;
-use wrapper_bindings::ZZ_p_random;
-use wrapper_bindings::ZZ_p_print;
 use wrapper_bindings::ZZ_p_set_string;
 use wrapper_bindings::ZZ_pX_SetCoeff_fp;
 
@@ -75,12 +73,28 @@ pub fn ark_to_NTL_ZZ_pX<F: ark_ff::PrimeField>(p: DensePolynomial<F>, x: *mut ZZ
 
 
 // Converts an NTL ZZ_p to an arkworks field element.
-pub fn NTL_ZZ_p_to_ark<F: ark_ff::PrimeField>(x: *mut ZZ_p) -> F {
+pub fn NTL_ZZ_p_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_p) -> F {
     unsafe{
         let x_cstr: *const u8 = ZZ_p_to_string(x);
         let x_slice = std::slice::from_raw_parts(x_cstr, 2);
         let p = F::from_le_bytes_mod_order(x_slice);        
         return p;
+    }
+}
+
+// Converts an NTL ZZ_pX to an arkworks polynomial.
+pub fn NTL_ZZ_pX_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_pX) -> DensePolynomial<F> 
+{
+    unsafe {
+        let deg = ZZ_pX_deg(x);
+        let mut coeffs:Vec<F> = Vec::new();
+
+        for i in 0..deg {
+            coeffs[i as usize] = NTL_ZZ_p_to_ark(ZZ_pX_coeff(x, i));
+        }
+
+        let poly: DensePolynomial<F> =  DensePolynomial::from_coefficients_vec(coeffs);
+        return poly;
     }
 }
 
