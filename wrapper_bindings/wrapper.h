@@ -5,6 +5,9 @@
     #include <NTL/ZZ_pX.h>
     #include <NTL/ZZ_p.h>
     #include <NTL/ZZ.h>
+    #include <iostream>
+    #include <string>
+    #include <sstream>
 
     using namespace NTL;
 extern "C" {
@@ -18,6 +21,16 @@ extern "C" {
 ZZ *ZZ_zero();
 ZZ *ZZ_set_long(long a);
 ZZ *ZZ_set_string(const char *a);
+
+// constructor for ZZ_p
+ZZ_p *ZZ_p_zero();
+ZZ_p *ZZ_p_set_long(long a);
+void ZZ_p_set_string(const char *a, ZZ_p *x);
+
+// ZZ_p helper functions
+void ZZ_p_print(ZZ_p *x);
+void ZZ_p_random(ZZ_p *x);
+unsigned char *ZZ_p_to_string(const ZZ_p *z);
 
 // init field modulus
 void init_modulus(const ZZ *p);
@@ -82,7 +95,6 @@ void ZZ_pX_eval(ZZ_p *b, const ZZ_pX *f, const ZZ_p *a);
 void ZZ_pX_mulmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *b, const ZZ_pX *f);
 void ZZ_pX_sqrmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f);
 void ZZ_pX_invmod(ZZ_pX *x, const ZZ_pX *a, const ZZ_pX *f);
-
 
 
 #ifdef __cplusplus

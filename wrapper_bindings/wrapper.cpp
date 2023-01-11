@@ -19,6 +19,37 @@ ZZ *ZZ_set_long(long a) {
     return x;
 };
 
+// ZZ_p constructors
+ZZ_p *ZZ_p_zero() {
+    ZZ_p *z = new ZZ_p();
+    return z;
+};
+
+ZZ_p *ZZ_p_set_long(long a) {
+    ZZ_p *z = new ZZ_p();
+    *z = a;
+    return z;
+};
+
+void ZZ_p_set_string(const char *a, ZZ_p *x){
+    *x = to_ZZ_p(conv<ZZ>(a));
+};
+
+void ZZ_p_print(ZZ_p *x) {
+    std::cout << *x << "\n";
+};
+
+void ZZ_p_random(ZZ_p *x) {
+    random(*x);
+};
+
+unsigned char *ZZ_p_to_string(const ZZ_p *z) {
+    ZZ zz = conv<ZZ>(*z);
+    unsigned char* x = new unsigned char[NumBytes(zz)];
+    BytesFromZZ(x, zz, NumBytes(zz));
+    return x;
+}
+
 // initiate field modulus
 void init_modulus(const ZZ *p){
     ZZ_p::init(*p);
