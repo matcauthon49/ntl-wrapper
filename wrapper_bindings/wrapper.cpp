@@ -39,6 +39,10 @@ void ZZ_p_print(ZZ_p *x) {
     std::cout << *x << "\n";
 };
 
+void ZZ_p_print_const(const ZZ_p *x) {
+    std::cout << *x << "\n";
+};
+
 void ZZ_p_random(ZZ_p *x) {
     random(*x);
 };
@@ -79,6 +83,7 @@ const ZZ_p *ZZ_pX_coeff(const ZZ_pX *a, long i) {
     const ZZ_p *z = &coeff(*a, i);
     return z;
 };
+
 
 const ZZ_p *ZZ_pX_LeadCoeff(const ZZ_pX *a) {
     const ZZ_p *z = &LeadCoeff(*a);

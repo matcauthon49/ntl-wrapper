@@ -3,22 +3,26 @@
 
 use std::ffi::CString;
 
+use ark_ec::PairingEngine;
 use num::{BigUint, BigInt, Num};
 use ark_poly::{self, univariate::DensePolynomial, UVPolynomial};
-use ark_bls12_381::Fq as F;
+use ark_bls12_381::Bls12_381;
 
 use wrapper_bindings::ZZ_p;
 use wrapper_bindings::ZZ_pX;
-use wrapper_bindings::ZZ_p_random;
-use wrapper_bindings::ZZ_p_print;
 use wrapper_bindings::ZZ_pX_coeff;
 use wrapper_bindings::ZZ_pX_deg;
+use wrapper_bindings::ZZ_pX_mul;
+use wrapper_bindings::ZZ_pX_print;
+use wrapper_bindings::ZZ_pX_zero;
 use wrapper_bindings::ZZ_p_to_string;
 use wrapper_bindings::ZZ_p_zero;
 use wrapper_bindings::init_modulus;
 use wrapper_bindings::ZZ_set_string;
 use wrapper_bindings::ZZ_p_set_string;
 use wrapper_bindings::ZZ_pX_SetCoeff_fp;
+
+type F = <Bls12_381 as PairingEngine>::Fr;
 
 // Takes a field element and initiates the NTL modulus.
 pub fn ark_NTL_modulus_init<F: ark_ff::PrimeField>() {
@@ -34,7 +38,7 @@ pub fn ark_NTL_modulus_init<F: ark_ff::PrimeField>() {
     unsafe{
         init_modulus(ZZ_set_string(ans.as_ptr() as *const i8));
     }
-    println!("modulus is {:?}", ans);
+    // println!("modulus is {:?}", ans);
 }
 
 // Converts arkworks Field element to an NTL ZZ_p.
@@ -81,7 +85,7 @@ pub fn NTL_ZZ_p_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_p, bytesize: usize) -
     unsafe{
         let x_cstr: *const u8 = ZZ_p_to_string(x);
         let x_slice = std::slice::from_raw_parts(x_cstr, bytesize);
-        let p = F::from_le_bytes_mod_order(x_slice);        
+        let p = F::from_be_bytes_mod_order(x_slice);  
         return p;
     }
 }
@@ -93,8 +97,8 @@ pub fn NTL_ZZ_pX_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_pX, bytesize: usize)
         let deg = ZZ_pX_deg(x);
         let mut coeffs:Vec<F> = Vec::new();
 
-        for i in 0..deg {
-            coeffs[i as usize] = NTL_ZZ_p_to_ark(ZZ_pX_coeff(x, i), bytesize);
+        for i in 0..deg+1 {
+            coeffs.push(NTL_ZZ_p_to_ark(ZZ_pX_coeff(x, i), bytesize));
         }
 
         let poly: DensePolynomial<F> =  DensePolynomial::from_coefficients_vec(coeffs);
@@ -103,4 +107,34 @@ pub fn NTL_ZZ_pX_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_pX, bytesize: usize)
 }
 
 pub fn main() { 
+    let one = F::from(1 as u64);
+    let two =  F::from(2 as u64);
+    let _three =  F::from(3 as u64);
+
+    let coeff = vec![one, two, one];
+    let coeff2 = vec![two, two, one];
+    let poly = DensePolynomial::from_coefficients_vec(coeff);
+    let poly2 = DensePolynomial::from_coefficients_vec(coeff2);
+
+    unsafe {
+        let x = ZZ_pX_zero();
+        let y = ZZ_pX_zero();
+        let z = ZZ_pX_zero();
+
+
+
+
+        ark_to_NTL_ZZ_pX(poly, x);
+        ark_to_NTL_ZZ_pX(poly2, y);
+
+        ZZ_pX_print(x);
+        ZZ_pX_print(y);
+
+        ZZ_pX_mul(z, x, y);
+        ZZ_pX_print(z);
+
+        let poly3: DensePolynomial<F> = NTL_ZZ_pX_to_ark(x, 1);
+
+        println!("{:?}", poly3);
+    }
 }

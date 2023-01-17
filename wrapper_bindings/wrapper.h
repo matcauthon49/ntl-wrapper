@@ -29,6 +29,7 @@ void ZZ_p_set_string(const char *a, ZZ_p *x);
 
 // ZZ_p helper functions
 void ZZ_p_print(ZZ_p *x);
+void ZZ_p_print_const(const ZZ_p *x);
 void ZZ_p_random(ZZ_p *x);
 unsigned char *ZZ_p_to_string(const ZZ_p *z);
 

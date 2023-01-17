@@ -14,6 +14,7 @@ rand = "0.8.5"
 num-bigint = "0.4.3"
 ark-poly = "0.3.0"
 num = "0.4.0"
+ark-ec = "0.3.0"
 
 [build-dependencies]
 bindgen = "0.63.0"
