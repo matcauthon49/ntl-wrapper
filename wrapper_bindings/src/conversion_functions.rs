@@ -85,7 +85,7 @@ pub fn NTL_ZZ_p_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_p, bytesize: usize) -
     unsafe{
         let x_cstr: *const u8 = ZZ_p_to_string(x);
         let x_slice = std::slice::from_raw_parts(x_cstr, bytesize);
-        let p = F::from_be_bytes_mod_order(x_slice);  
+        let p = F::from_le_bytes_mod_order(x_slice);  
         return p;
     }
 }
@@ -109,32 +109,38 @@ pub fn NTL_ZZ_pX_to_ark<F: ark_ff::PrimeField>(x: *const ZZ_pX, bytesize: usize)
 pub fn main() { 
     let one = F::from(1 as u64);
     let two =  F::from(2 as u64);
-    let _three =  F::from(3 as u64);
 
     let coeff = vec![one, two, one];
     let coeff2 = vec![two, two, one];
     let poly = DensePolynomial::from_coefficients_vec(coeff);
     let poly2 = DensePolynomial::from_coefficients_vec(coeff2);
 
-    unsafe {
+    let poly3: DensePolynomial<F> = unsafe {
         let x = ZZ_pX_zero();
         let y = ZZ_pX_zero();
         let z = ZZ_pX_zero();
 
-
-
-
         ark_to_NTL_ZZ_pX(poly, x);
         ark_to_NTL_ZZ_pX(poly2, y);
 
-        ZZ_pX_print(x);
-        ZZ_pX_print(y);
+        // ZZ_pX_print(x);
+        // ZZ_pX_print(y);
 
         ZZ_pX_mul(z, x, y);
-        ZZ_pX_print(z);
+        // ZZ_pX_print(z);
 
-        let poly3: DensePolynomial<F> = NTL_ZZ_pX_to_ark(x, 1);
+        let poly3: DensePolynomial<F> = NTL_ZZ_pX_to_ark(z, 1);
 
-        println!("{:?}", poly3);
+        poly3
+    };
+
+    println!("{:?}", poly3);
+
+    unsafe {
+
+        let ntlf = ZZ_pX_zero();
+        ark_to_NTL_ZZ_pX(poly3, ntlf);
+        ZZ_pX_print(ntlf);
     }
+
 }
